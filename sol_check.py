@@ -81,11 +81,23 @@ try:
 except:
     exit("ERREUR : Problème avec le format de la solution.")
 
+# Ensure that all models are included
+if (len(solution) != num_models):
+    print("ERREUR: Le problème comprend", num_models, \
+          "modèles alors que votre solution en contient", len(solution))
+    exit(0)
+
+# Ensure that no model is used a negative number of times
+for m in solution:
+    if (m < 0):
+        print("ERREUR: Un modèle de votre solution est utilisé", m, "fois.")
+        exit(0)
+    
 # Ensure that all parts are covered
 if sum([-part for part in [min(0, part) for part in get_parts_delta(solution)]]) > 0:
     print("ERREUR : Certaines de vos pièces n'appartiennent à aucun modèle.")
     exit(0)
-
+    
 # Compute the solution value
 z = sum(part_card * part_price for part_card, part_price in
         zip([max(0, part) for part in get_parts_delta(solution)], part_prices))

@@ -1,5 +1,7 @@
 package com.company;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    static String filename = "./exemplaires/LEGO_100_100_2000";
+    static String filename; //= "./exemplaires/LEGO_100_100_2000";
     static int totalLegoTypes;
     public static ArrayList<Lego> myLegos = new ArrayList<>();
     static ArrayList<LegoModel> models = new ArrayList<>();
@@ -18,6 +20,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
+            filename = args[0];
             readTextFile(filename);
             Solver solver = new Solver(models, prices);
             List<LegoModel> solution = solver.solve();
@@ -33,6 +36,7 @@ public class Main {
             for (int i = 0; i < formattedSolution.length; i++) {
                 System.out.print(formattedSolution[i] + " ");
             }
+            write("solution", formattedSolution);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -62,5 +66,15 @@ public class Main {
             models.add(new LegoModel(i, new ArrayList<>(modelLegos)));
         }
         System.out.println("done reading textfile");
+    }
+
+    public static void write (String filename, int[]x) throws IOException{
+        BufferedWriter outputWriter = null;
+        outputWriter = new BufferedWriter(new FileWriter(filename));
+        for (int i = 0; i < x.length; i++) {
+            outputWriter.write(x[i]+ " ");
+        }
+        outputWriter.flush();
+        outputWriter.close();
     }
 }
