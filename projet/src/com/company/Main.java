@@ -13,6 +13,7 @@ public class Main {
     static int totalLegoTypes;
     public static ArrayList<Lego> myLegos = new ArrayList<>();
     static ArrayList<LegoModel> models = new ArrayList<>();
+    static int[] formattedSolution;
     static String[] prices;
 
     public static void main(String[] args) {
@@ -21,6 +22,17 @@ public class Main {
             Solver solver = new Solver(models, prices);
             List<LegoModel> solution = solver.solve();
             System.out.println("Solution cost: " + solver.getCostOfSolution());
+            formattedSolution = new int[models.size()];
+            for (int i = 0; i < models.size(); i++) {
+                formattedSolution[i] = 0;
+            }
+            for (int i = 0; i < solution.size(); i++) {
+                int index = solution.get(i).id;
+                formattedSolution[index] += 1;
+            }
+            for (int i = 0; i < formattedSolution.length; i++) {
+                System.out.print(formattedSolution[i] + " ");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

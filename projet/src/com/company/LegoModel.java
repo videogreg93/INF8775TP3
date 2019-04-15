@@ -15,7 +15,6 @@ public class LegoModel implements Comparable {
 
     /**
      * Returns how many pieces this model removes from my collection
-     *
      * @return
      */
     public int totalCoveredPieces() {
@@ -27,21 +26,8 @@ public class LegoModel implements Comparable {
             } else {
                 total += Math.max(lego.quantity, 0);
             }
-//            else {
-//                total += (lego.quantity - modelLego.quantity) * modelLego.price; // factor in price when choosing models that require buying pieces
-//            }
         }
         return total;
-    }
-
-
-    public boolean bringsAQuantityBelowZero() {
-        for (Lego lego : myPieces) {
-            Lego modelLego = findById(lego.id);
-            if (lego.quantity - modelLego.quantity < 0)
-                return true;
-        }
-        return false;
     }
 
     /**
@@ -52,11 +38,27 @@ public class LegoModel implements Comparable {
         int totalCost = 0;
         for (Lego lego : myPieces) {
             Lego modelLego = findById(lego.id);
-            if (lego.quantity - modelLego.quantity < 0) {
-                totalCost += (Math.abs(lego.quantity - modelLego.quantity) * lego.price);
+            if (lego.quantity > 0) {
+                if (lego.quantity - modelLego.quantity < 0) {
+                    totalCost += (Math.abs(lego.quantity - modelLego.quantity) * lego.price);
+                }
+            } else {
+                totalCost += (modelLego.quantity * lego.price);
             }
         }
         return totalCost;
+    }
+
+    /**
+     * Global price of the model
+     * @return price
+     */
+    public int priceOfModel() {
+        int totalPrice = 0;
+        for (Lego lego : legos) {
+            totalPrice += (lego.quantity * lego.price);
+        }
+        return totalPrice;
     }
 
     public Lego findById(int id) {
@@ -71,27 +73,20 @@ public class LegoModel implements Comparable {
     @Override
     public int compareTo(Object o) {
         LegoModel other = (LegoModel) o;
-        // Favor the model that doesnt bring a quantity below 0
+        // Favor the model that cover the most legos
         if (other == null) {
             return 0;
         } else {
-            if (!this.bringsAQuantityBelowZero() && !other.bringsAQuantityBelowZero()) {
-                // If neither requires buying additional legos, pick the one that covers the most legos
-                if (this.totalCoveredPieces() > other.totalCoveredPieces())
-                    return 1;
-                else
-                    return -1;
-            } else if (this.bringsAQuantityBelowZero() && other.bringsAQuantityBelowZero()) {
-                // If both require buying legos, choose the one that cost lestt
-                if (this.costOfModel() < other.costOfModel())
+            // If both models cover the same amount of legos, take the one that cost less to add
+            if (this.totalCoveredPieces() > other.totalCoveredPieces()) {
+                return -1;
+            } else if (this.totalCoveredPieces() == other.totalCoveredPieces()) {
+                if (this.costOfModel() > other.costOfModel())
                     return 1;
                 else
                     return -1;
             } else {
-                if (other.bringsAQuantityBelowZero())
-                    return 1;
-                else
-                    return -1;
+                return 1;
             }
         }
     }
