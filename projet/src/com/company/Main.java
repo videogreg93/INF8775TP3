@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    static String filename = "./exemplaires/LEGO_50_50_1000.txt";
+    static String filename = "./exemplaires/LEGO_100_100_2000";
     static int totalLegoTypes;
     public static ArrayList<Lego> myLegos = new ArrayList<>();
     static ArrayList<LegoModel> models = new ArrayList<>();

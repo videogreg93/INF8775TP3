@@ -32,7 +32,7 @@ public class LegoModel implements Comparable {
 
     /**
      * Cost to buy the missing pieces of the model
-     * @return cost
+     * @return totalCost
      */
     public int costOfModel() {
         int totalCost = 0;
@@ -50,8 +50,8 @@ public class LegoModel implements Comparable {
     }
 
     /**
-     * Global price of the model
-     * @return price
+     * The global price of the model
+     * @return totalPrice
      */
     public int priceOfModel() {
         int totalPrice = 0;
