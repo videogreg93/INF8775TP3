@@ -19,7 +19,7 @@ public class Solver {
             allModels.sort(LegoModel::compareTo);
             int i = 0;
             LegoModel modelToAdd = allModels.get(i);
-            while (modelToAdd.totalCoveredPieces() <= 0 && i < allModels.size() - 1) {
+            while (modelToAdd.totalRemovedPieces() <= 0 && i < allModels.size() - 1) {
                 i++;
                 modelToAdd = allModels.get(i);
             }
@@ -27,19 +27,22 @@ public class Solver {
             calculateNewQuantities(modelToAdd);
             isSolved = calculateIfSolved();
         }
-        // Heuristic algorithm to check for possible better solutions
+        // Heuristic algorithm to check for possible better solutions with an iterations limit
         int index = 0;
+        int limit = 100;
         Boolean hasBetterSolution = true;
         while (hasBetterSolution) {
             List<LegoModel> neighbors = findNeighbors(solution, index);
             LegoModel bestNeighbor;
-            if (neighbors.size() <= 0) {
+            if (neighbors.size() <= 0 || limit <= 0) {
                 index ++;
+                limit = 100;
             } else {
                 bestNeighbor = findBestNeighbors(neighbors);
                 removeModel(solution, index);
                 solution.add(bestNeighbor);
                 calculateNewQuantities(bestNeighbor);
+                limit --;
             }
             if (index >= solution.size()) {
                 hasBetterSolution = false;
@@ -57,10 +60,7 @@ public class Solver {
         }
     }
 
-    /**
-     * Call once solution has been solved to get the cost of this solution
-     * @return cost
-     */
+    // Call once solution has been solved to get the cost of this solution
     public int getCostOfSolution() {
         int totalCost = 0;
         for (Lego lego : myPieces) {
@@ -97,7 +97,7 @@ public class Solver {
         return neighbors;
     }
 
-    // Check if a model can be a valid improvement
+    // Check if a model can be an improvement and keep the solution valid
     private boolean canBeNeighbor(LegoModel currentModel, LegoModel possibleNeighbor) {
         if (currentModel.priceOfModel() < possibleNeighbor.priceOfModel() || currentModel.id == possibleNeighbor.id) {
             return false;
@@ -112,7 +112,7 @@ public class Solver {
         return true;
     }
 
-    // Choose the neighbor that reduce the most the solution cost
+    // Choose the neighbor that reduce the most the solution cost by having the lowest price
     private LegoModel findBestNeighbors(List<LegoModel> neighbors) {
         LegoModel bestNeighbor = neighbors.get(0);
         for (LegoModel model : neighbors) {

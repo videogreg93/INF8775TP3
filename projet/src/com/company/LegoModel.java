@@ -13,11 +13,8 @@ public class LegoModel implements Comparable {
         this.legos = legos;
     }
 
-    /**
-     * Returns how many pieces this model removes from my collection
-     * @return
-     */
-    public int totalCoveredPieces() {
+    // Returns how many pieces this model removes from my collection
+    public int totalRemovedPieces() {
         int total = 0;
         for (Lego lego : myPieces) {
             Lego modelLego = findById(lego.id);
@@ -30,10 +27,7 @@ public class LegoModel implements Comparable {
         return total;
     }
 
-    /**
-     * Cost to buy the missing pieces of the model
-     * @return totalCost
-     */
+    // Return the cost to buy the missing pieces of the model
     public int costOfModel() {
         int totalCost = 0;
         for (Lego lego : myPieces) {
@@ -49,10 +43,7 @@ public class LegoModel implements Comparable {
         return totalCost;
     }
 
-    /**
-     * The global price of the model
-     * @return totalPrice
-     */
+    // Return the global price of the model
     public int priceOfModel() {
         int totalPrice = 0;
         for (Lego lego : legos) {
@@ -73,14 +64,14 @@ public class LegoModel implements Comparable {
     @Override
     public int compareTo(Object o) {
         LegoModel other = (LegoModel) o;
-        // Favor the model that cover the most legos
+        // Favor the model that remove the most legos
         if (other == null) {
             return 0;
         } else {
-            // If both models cover the same amount of legos, take the one that cost less to add
-            if (this.totalCoveredPieces() > other.totalCoveredPieces()) {
+            // If both models cover the same amount of legos, take the one that cost the less to add
+            if (this.totalRemovedPieces() > other.totalRemovedPieces()) {
                 return -1;
-            } else if (this.totalCoveredPieces() == other.totalCoveredPieces()) {
+            } else if (this.totalRemovedPieces() == other.totalRemovedPieces()) {
                 if (this.costOfModel() > other.costOfModel())
                     return 1;
                 else

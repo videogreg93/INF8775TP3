@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    static String filename; //= "./exemplaires/LEGO_100_100_2000";
+    static String filename = "./exemplaires/LEGO_100_100_1000";
     static int totalLegoTypes;
     public static ArrayList<Lego> myLegos = new ArrayList<>();
     static ArrayList<LegoModel> models = new ArrayList<>();
@@ -20,7 +20,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            filename = args[0];
+            //filename = args[0];
             readTextFile(filename);
             Solver solver = new Solver(models, prices);
             List<LegoModel> solution = solver.solve();
