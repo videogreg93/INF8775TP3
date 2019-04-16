@@ -17,8 +17,9 @@ public class Solver {
         // As long as there are legos left in my collection, add model to the solution
         while (!isSolved) {
             allModels.sort(LegoModel::compareTo);
+            int random = (int)(Math.random()*((5)+1));
+            LegoModel modelToAdd = allModels.get(random);
             int i = 0;
-            LegoModel modelToAdd = allModels.get(i);
             while (modelToAdd.totalRemovedPieces() <= 0 && i < allModels.size() - 1) {
                 i++;
                 modelToAdd = allModels.get(i);
