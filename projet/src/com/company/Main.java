@@ -76,5 +76,6 @@ public class Main {
         }
         outputWriter.flush();
         outputWriter.close();
+        System.out.println("done writing solution");
     }
 }
